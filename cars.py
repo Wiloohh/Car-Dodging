@@ -2,7 +2,6 @@ import pygame
 import os
 import random
 
-from pygame.draw import circle
 from pygame.sprite import collide_mask, collide_rect
 
 
@@ -62,10 +61,16 @@ class Enemy(Car):
 
     def __init__(self):
         self.x = self.posMap[random.randint(1, 4)][0] - 40
-        self.y = self.posMap[random.randint(1, 4)][1] - random.randint(100, 1500)
+        self.y = self.posMap[random.randint(1, 4)][1] - random.randint(200, 1500)
+        self.velocity = random.randint(4, 8)
         self.pos = (self.x, self.y)
         self.carImg = self.colorMap[random.choice(["yellow", "blue", "red", "white"])]
         self.mask = pygame.mask.from_surface(self.carImg)
+        self.securityRangeX = self.carImg.get_width() + 50
+        self.securityRangeY = self.carImg.get_height() + 50
 
     def move(self, vel):
         self.y += vel
+
+    def check_spawn(self):
+        pass

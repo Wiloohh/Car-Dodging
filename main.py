@@ -54,7 +54,8 @@ def main():
         timerFont = mainFont.render(f"Chrono: {timer_rounded}", True, (0, 0, 0))
         # Draw the background and Player
         screen.blit(background, (0, 0))
-        screen.blit(player.carImg, (player.x, player.y))
+        if alive:
+            screen.blit(player.carImg, (player.x, player.y))
         # Draw the enemies
         for enemy in enemies:
             screen.blit(enemy.carImg, (enemy.x, enemy.y))
@@ -149,4 +150,5 @@ def main():
         redraw_window()
 
 
-main()
+if __name__ == "__main__":
+    main()

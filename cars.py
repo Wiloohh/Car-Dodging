@@ -1,8 +1,7 @@
+from typing import ParamSpec
 import pygame
 import os
 import random
-
-from pygame.sprite import collide_mask, collide_rect
 
 
 class Car:

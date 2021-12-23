@@ -36,7 +36,7 @@ def main():
     mainFont = pygame.font.SysFont("sans serif", 50)
     loseFont = pygame.font.SysFont("sans serif", 70)
     player = Player(WIDTH // 2, HEIGHT - 150)
-    enemies = [Enemy(), Enemy(), Enemy(), Enemy(), Enemy()]
+    enemies = [Enemy()]
     begin = time.perf_counter()
     clock = pygame.time.Clock()
     bestScore = 0
@@ -131,7 +131,7 @@ def main():
                 # * Reset everything
                 dead = False
                 alive = True
-                enemies = [Enemy(), Enemy(), Enemy(), Enemy(), Enemy()]
+                enemies = [Enemy()]
                 score = 0.1
                 lifes = 5
                 lostCount = 0

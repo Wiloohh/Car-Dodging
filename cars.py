@@ -60,6 +60,7 @@ class Enemy(Car):
     def __init__(self):
         self.x = self.posMap[random.randint(1, 4)][0] - 40
         self.y = self.posMap[random.randint(1, 4)][1] - random.randint(200, 1500)
+        self.velocity = random.randint(4, 10)
         self.pos = (self.x, self.y)
         self.carImg = self.colorMap[random.choice(["yellow", "blue", "red", "white"])]
         self.mask = pygame.mask.from_surface(self.carImg)

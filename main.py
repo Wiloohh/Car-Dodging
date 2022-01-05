@@ -1,3 +1,4 @@
+from random import randint
 import pygame
 from sys import exit
 import os
@@ -36,7 +37,7 @@ def main():
     mainFont = pygame.font.SysFont("sans serif", 50)
     loseFont = pygame.font.SysFont("sans serif", 70)
     player = Player(WIDTH // 2, HEIGHT - 150)
-    enemies = [Enemy()]
+    enemies = [Enemy(), Enemy(), Enemy(), Enemy(), Enemy()]
     begin = time.perf_counter()
     clock = pygame.time.Clock()
     bestScore = 0
@@ -50,7 +51,7 @@ def main():
     level = 1
     lifes = 5
     playerVelocity = 10
-    enemyVelocity = 5
+    enemyVelocity = score ** score / 10
     lostCount = 0
 
     def redraw_window():
@@ -122,7 +123,6 @@ def main():
 
         #! If the player is dead
         if dead:
-            alive = False
             enemies = []
             if score > bestScore:
                 bestScore = math.floor(score)
@@ -131,12 +131,14 @@ def main():
                 # * Reset everything
                 dead = False
                 alive = True
-                enemies = [Enemy()]
+                enemies = []
                 score = 0.1
                 lifes = 5
                 lostCount = 0
-                level = 1
-                enemyVelocity = 5
+                level = 0
+                waveLength = 5
+                changeWaveLenght = True
+                enemyVelocity = score ** score / 100
                 begin = time.perf_counter()
                 player.x, player.y = WIDTH // 2, HEIGHT - 150
 
@@ -144,28 +146,27 @@ def main():
         elif alive:
             new_begin = time.perf_counter()
             timer = new_begin - begin
-            score += 0.1
-            enemyVelocity = level * 2
+            score += level / 50
+            for enemy in enemies:
+                try:
+                    enemy.velocity += enemyVelocity
+                except ZeroDivisionError:
+                    enemy.velocity = 5
 
             #! Key Bindings
             keysPressed = pygame.key.get_pressed()
-            if (
-                keysPressed[pygame.K_d]
-                and (player.x + player.get_width()) < WIDTH - 100
-            ):  # RIGHT
+            if keysPressed[pygame.K_d] and player.x + player.get_width() < WIDTH - 100:
                 player.x += playerVelocity
-            if keysPressed[pygame.K_q] and (player.x) > 100:  # LEFT
+            if keysPressed[pygame.K_q] and player.x > 100:
                 player.x -= playerVelocity
-            if keysPressed[pygame.K_z] and player.y > 0:  # UP
+            if keysPressed[pygame.K_z] and player.y > 0:
                 player.y -= playerVelocity
-            if (
-                keysPressed[pygame.K_s] and (player.y + player.get_height()) < HEIGHT
-            ):  # DOWN
+            if keysPressed[pygame.K_s] and player.y + player.get_height() < HEIGHT:
                 player.y += playerVelocity
 
             #! Move and check collisions
             for enemy in enemies:
-                enemy.move(enemyVelocity)
+                enemy.move(enemy.velocity)
                 if enemy.y > HEIGHT:
                     enemies.remove(enemy)
                 if collide(player, enemy):
@@ -176,12 +177,18 @@ def main():
             if len(enemies) == 0 and alive:
                 level += 1
                 if changeWaveLenght:
-                    enemies.append(Enemy())
+                    for i in range(waveLength):
+                        enemies.append(Enemy())
                     waveLength += 2
+
+            #! Check if the waves are too big
+            if waveLength >= 17:
+                changeWaveLenght = False
 
             #! Check if the player loses
             if lifes <= 0:
                 dead = True
+                alive = False
             # ? if waveLength >= 16:
             # ?     changeWaveLenght = False
 
